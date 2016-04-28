@@ -33,8 +33,61 @@ Note : Check the function Parameters ,Its a double pointer .
 
 #include "stdafx.h"
 #include<stdlib.h>
+void get_spiral(int rows, int columns, int k, int **input_array, int *arr, int *index)
+{
+	if ((rows <= 0) || (columns <= 0))
+		return;
+
+	if (rows == 1) {
+		for (int j = 0; j < columns; j++)
+		{
+			arr[*index] = *(*(input_array + k) + k + j);
+			*index += 1;
+		}
+		return;
+	}
+
+	if (columns == 1) {
+		for (int i = 0; i < rows; i++)
+		{
+			arr[*index] = *(*(input_array + k + i) + k);
+			*index += 1;
+		}
+		return;
+	}
+	for (int j = 0; j < columns - 1; j++)
+	{
+		arr[*index] = *(*(input_array + k) + k + j);
+		*index += 1;
+	}
+	for (int i = 0; i < rows - 1; i++)
+	{
+		arr[*index] = *(*(input_array + k + i) + k + columns - 1);
+		*index += 1;
+	}
+	for (int j = 0; j < columns - 1; j++)
+	{
+		arr[*index] = *(*(input_array + k + rows - 1) + k + columns - 1 - j);
+		*index += 1;
+	}
+	for (int i = 0; i < rows - 1; i++)
+	{
+		arr[*index] = *(*(input_array + k + rows - 1 - i) + k);
+		*index += 1;
+	}
+
+	get_spiral(rows - 2, columns - 2, k + 1, input_array, arr, index);
+	return;
+}
 
 int *spiral(int rows, int columns, int **input_array)
 {
-	return NULL;
+	if (input_array == NULL || rows <= 0 || columns <= 0)
+		return NULL;
+	int *arr = (int *)malloc(rows*columns*sizeof(int));
+	int index = 0;
+	get_spiral(rows, columns, 0, input_array, arr, &index);
+	return arr;
 }
+
+
